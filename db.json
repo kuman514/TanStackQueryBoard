@@ -12,22 +12,22 @@
   "comments": [
     {
       "id": "1-1234",
-      "post-id": "aggie-koishi",
+      "postId": "aggie-koishi",
       "content": "번역: 코이시는 이쁜 애기!"
     },
     {
       "id": "2-553",
-      "post-id": "aggie-hoshino",
+      "postId": "aggie-hoshino",
       "content": "번역: 호시노는 이쁜 애기!"
     },
     {
       "id": "3-5645",
-      "post-id": "aggie-koishi",
+      "postId": "aggie-koishi",
       "content": "애기코이시 둥기둥기 해야 한다!"
     },
     {
       "id": "4-453",
-      "post-id": "aggie-hoshino",
+      "postId": "aggie-hoshino",
       "content": "애기호시노도 둥기둥기 해야 한다!"
     }
   ]
