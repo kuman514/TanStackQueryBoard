@@ -1,5 +1,16 @@
+import { BrowserRouter, Route, Routes } from 'react-router';
+
+import RootLayout from '^/pages/root';
+import HomePage from './pages/home';
+
 export default function App() {
   return (
-    <main className="w-screen min-h-dvh flex flex-col items-center"></main>
+    <BrowserRouter>
+      <Routes>
+        <Route element={<RootLayout />}>
+          <Route index element={<HomePage />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
   );
 }
