@@ -11,7 +11,7 @@ export function PostTableRow({ post }: Props) {
    */
 
   return (
-    <tr>
+    <tr className="cursor-pointer hover:text-blue-200">
       <td>{post.id}</td>
       <td className="text-start">{post.content}</td>
     </tr>
