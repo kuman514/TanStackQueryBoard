@@ -1,7 +1,8 @@
 import { BrowserRouter, Route, Routes } from 'react-router';
 
+import HomePage from '^/pages/home';
+import PostTablePage from '^/pages/post-table';
 import RootLayout from '^/pages/root';
-import HomePage from './pages/home';
 
 export default function App() {
   return (
@@ -9,6 +10,10 @@ export default function App() {
       <Routes>
         <Route element={<RootLayout />}>
           <Route index element={<HomePage />} />
+
+          <Route path="/posts">
+            <Route index element={<PostTablePage />} />
+          </Route>
         </Route>
       </Routes>
     </BrowserRouter>
