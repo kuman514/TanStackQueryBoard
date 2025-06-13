@@ -13,13 +13,17 @@ export default function Header() {
       </NavLink>
       <NavLink
         to="/posts"
-        className={({ isActive }) => (isActive ? 'font-bold' : '')}
+        className={({ isActive }) =>
+          isActive ? 'font-bold text-blue-200' : ''
+        }
       >
         Posts
       </NavLink>
       <NavLink
         to="/create"
-        className={({ isActive }) => (isActive ? 'font-bold' : '')}
+        className={({ isActive }) =>
+          isActive ? 'font-bold text-blue-200' : ''
+        }
       >
         Create
       </NavLink>
