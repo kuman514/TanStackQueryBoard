@@ -1,3 +1,4 @@
+import { Link } from 'react-router';
 import type { Post } from './types';
 
 interface Props {
@@ -5,15 +6,12 @@ interface Props {
 }
 
 export function PostTableRow({ post }: Props) {
-  /**
-   * @todo
-   * Add link to /posts/{postId}
-   */
-
   return (
-    <tr className="cursor-pointer hover:text-blue-200">
+    <tr>
       <td>{post.id}</td>
-      <td className="text-start">{post.content}</td>
+      <td className="text-start cursor-pointer hover:text-blue-200">
+        <Link to={`/posts/${post.id}`}>{post.content}</Link>
+      </td>
     </tr>
   );
 }
