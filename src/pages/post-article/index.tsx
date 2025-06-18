@@ -13,7 +13,7 @@ export default function PostArticlePage() {
           게시글 콘텐츠
         </h1>
       </div>
-      <ul className="w-full flex flex-col items-start [&_li]:flex [&_li]:flex-col [&_li]:items-start [&_li]:w-full [&_li]:even:bg-gray-200 [&_li]:p-2">
+      <ul className="w-full flex flex-col items-start [&_li]:flex [&_li]:flex-col [&_li]:items-start [&_li]:w-full [&_li]:even:bg-gray-200 [&_li]:dark:even:bg-gray-700 [&_li]:p-2">
         <li>댓글 1</li>
         <li>댓글 2</li>
         <li>댓글 3</li>
