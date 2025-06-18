@@ -16,7 +16,7 @@ export default function PostTablePage() {
             <th scope="col">게시글</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody className="[&_tr]:even:bg-gray-200 [&_tr]:dark:even:bg-gray-800">
           <PostTableRow
             post={{
               id: '123',
