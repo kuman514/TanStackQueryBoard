@@ -34,7 +34,6 @@ export default function CreatePage() {
         event.preventDefault();
         const formData = new FormData(event.currentTarget);
         const newContent = formData.get('postContent') as string;
-        console.log(newContent);
         if (!newContent || !newContent?.length || newContent.length === 0) {
           return false;
         }
