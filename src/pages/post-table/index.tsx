@@ -3,9 +3,8 @@ import { useInfiniteQuery } from '@tanstack/react-query';
 import { PostTableRow } from '^/entities/post/table-row';
 import type { Post } from '^/entities/post/types';
 import { apiClient } from '^/shared/api';
+import { ITEMS_PER_PAGE } from '^/shared/api/constants';
 import type { GetPagenatedApiResponse } from '^/shared/api/types';
-
-const POSTS_PER_PAGE = 10;
 
 export default function PostTablePage() {
   const { data, isFetching, hasNextPage, fetchNextPage } = useInfiniteQuery({
@@ -13,7 +12,7 @@ export default function PostTablePage() {
     queryFn: async ({ pageParam }) =>
       (
         await apiClient.get<GetPagenatedApiResponse<Post>>(
-          `/posts?_page=${pageParam}&_per_page=${POSTS_PER_PAGE}`
+          `/posts?_page=${pageParam}&_per_page=${ITEMS_PER_PAGE}`
         )
       ).data,
     initialPageParam: 1,
