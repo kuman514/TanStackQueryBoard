@@ -1,4 +1,4 @@
-import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
+import { useInfiniteQuery, useMutation, useQuery } from '@tanstack/react-query';
 import { useParams } from 'react-router';
 
 import type { Comment } from '^/entities/comment/types';
@@ -6,6 +6,8 @@ import type { Post } from '^/entities/post/types';
 import { apiClient } from '^/shared/api';
 import { ITEMS_PER_PAGE } from '^/shared/api/constants';
 import type { GetPagenatedApiResponse } from '^/shared/api/types';
+import TextInput from '^/shared/text-input';
+import { useEffect, useState } from 'react';
 
 export default function PostArticlePage() {
   const { postId } = useParams();
@@ -44,6 +46,29 @@ export default function PostArticlePage() {
     getNextPageParam: (lastPage) => lastPage.next,
     enabled: Boolean(postData?.id),
   });
+
+  const {
+    mutate: postComment,
+    isPending: isPostCommentPending,
+    isSuccess: isPostCommentSuccess,
+  } = useMutation({
+    mutationFn: async (newComment: string) => {
+      const response = await apiClient.post<Comment>('/comments', {
+        postId,
+        content: newComment,
+      });
+      return response.data;
+    },
+  });
+
+  const [comment, setComment] = useState<string>('');
+
+  useEffect(() => {
+    if (!isPostCommentSuccess) {
+      return;
+    }
+    setComment('');
+  }, [isPostCommentSuccess]);
 
   const renderPost = isPending ? (
     <span className="w-full font-bold text-4xl border-b px-4 pb-4 text-left">
@@ -90,6 +115,36 @@ export default function PostArticlePage() {
       >
         {renderSeeMoreCommentsButtonLabel}
       </button>
+      <form
+        action="POST"
+        className="w-full max-w-4xl flex flex-col items-center text-center gap-8 p-24"
+        onSubmit={(event) => {
+          event.preventDefault();
+          const formData = new FormData(event.currentTarget);
+          const newComment = formData.get('postComment') as string;
+          if (typeof newComment !== 'string' || newComment.length === 0) {
+            return false;
+          }
+          postComment(newComment);
+          return false;
+        }}
+      >
+        <TextInput
+          id="postComment"
+          isMultiLine
+          textValue={comment}
+          onChange={setComment}
+        />
+        <button
+          className="px-4 py-3 bg-green-500 text-white rounded-lg cursor-pointer hover:bg-green-300 disabled:bg-gray-300 disabled:cursor-auto"
+          disabled={
+            comment.length === 0 || isPostCommentPending || !postData?.id
+          }
+          type="submit"
+        >
+          댓글 달기
+        </button>
+      </form>
     </section>
   );
 }
