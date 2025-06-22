@@ -33,8 +33,8 @@ export default function CreatePage() {
       onSubmit={(event) => {
         event.preventDefault();
         const formData = new FormData(event.currentTarget);
-        const newContent = formData.get('postContent') as string;
-        if (!newContent || !newContent?.length || newContent.length === 0) {
+        const newContent = formData.get('postContent');
+        if (typeof newContent !== 'string' || newContent.length === 0) {
           return false;
         }
         mutate(newContent);
