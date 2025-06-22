@@ -1,5 +1,5 @@
 import { useInfiniteQuery, useMutation, useQuery } from '@tanstack/react-query';
-import { useParams } from 'react-router';
+import { Link, useParams } from 'react-router';
 
 import type { Comment } from '^/entities/comment/types';
 import type { Post } from '^/entities/post/types';
@@ -14,11 +14,6 @@ export default function PostArticlePage() {
   if (!postId) {
     throw new Error('Post ID is required to show post article page.');
   }
-
-  /**
-   * @todo
-   * Add comments using useMutation
-   */
 
   const { data: postData, isPending } = useQuery({
     queryKey: ['posts', postId],
@@ -76,7 +71,10 @@ export default function PostArticlePage() {
     </span>
   ) : (
     <>
-      <span className="w-full text-left">게시글 ID: {postData?.id}</span>
+      <div className="w-full flex flex-row justify-between">
+        <span className="text-left">게시글 ID: {postData?.id}</span>
+        <Link to={`/posts/${postId}/modify`}>수정하기</Link>
+      </div>
       <h1 className="w-full font-bold text-4xl border-b px-4 pb-4 text-left">
         {postData?.content}
       </h1>
@@ -116,7 +114,7 @@ export default function PostArticlePage() {
         {renderSeeMoreCommentsButtonLabel}
       </button>
       <form
-        action="POST"
+        method="POST"
         className="w-full max-w-4xl flex flex-col items-center text-center gap-8 p-24"
         onSubmit={(event) => {
           event.preventDefault();

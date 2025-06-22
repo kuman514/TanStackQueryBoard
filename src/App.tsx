@@ -5,6 +5,7 @@ import PostArticlePage from '^/pages/post-article';
 import PostTablePage from '^/pages/post-table';
 import RootLayout from '^/pages/root';
 import CreatePage from './pages/create';
+import ModifyPage from './pages/modify';
 
 export default function App() {
   return (
@@ -17,7 +18,10 @@ export default function App() {
 
           <Route path="/posts">
             <Route index element={<PostTablePage />} />
-            <Route path=":postId" element={<PostArticlePage />} />
+            <Route path=":postId">
+              <Route index element={<PostArticlePage />} />
+              <Route path="modify" element={<ModifyPage />} />
+            </Route>
           </Route>
         </Route>
       </Routes>

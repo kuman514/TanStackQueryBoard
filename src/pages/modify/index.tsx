@@ -1,18 +1,35 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router';
 
 import type { Post } from '^/entities/post/types';
 import { apiClient } from '^/shared/api';
 import TextInput from '^/shared/text-input';
-import { useNavigate } from 'react-router';
 
-export default function CreatePage() {
+export default function ModifyPage() {
+  const { postId } = useParams();
+  if (!postId) {
+    throw new Error('Post ID is required to show post modify page.');
+  }
+
   const navigate = useNavigate();
 
+  const { data: postData, isPending: isGetPostArticlePending } = useQuery({
+    queryKey: ['posts', postId],
+    queryFn: async () => {
+      const response = await apiClient.get<Post>(`/posts/${postId}`);
+      return response.data;
+    },
+  });
+
   const [content, setContent] = useState<string>('');
-  const { mutate, isPending, isSuccess, data } = useMutation({
+  const {
+    mutate,
+    isPending: isPatchPostArticlePending,
+    isSuccess,
+  } = useMutation({
     mutationFn: async (newContent: string) => {
-      const response = await apiClient.post<Post>('/posts', {
+      const response = await apiClient.patch<Post>(`/posts/${postId}`, {
         content: newContent,
       });
       return response.data;
@@ -20,15 +37,22 @@ export default function CreatePage() {
   });
 
   useEffect(() => {
-    if (!isSuccess || !data.id) {
+    if (!isSuccess) {
       return;
     }
-    navigate(`/posts/${data.id}`);
-  }, [isSuccess, data?.id, navigate]);
+    navigate(`/posts/${postId}`);
+  }, [isSuccess, postId, navigate]);
+
+  useEffect(() => {
+    if (!postData) {
+      return;
+    }
+    setContent(postData.content);
+  }, [postData]);
 
   return (
     <form
-      method="POST"
+      method="PATCH"
       className="w-full max-w-4xl flex flex-col items-center text-center gap-8 p-24"
       onSubmit={(event) => {
         event.preventDefault();
@@ -49,7 +73,11 @@ export default function CreatePage() {
       />
       <button
         className="px-4 py-3 bg-green-500 text-white rounded-lg cursor-pointer hover:bg-green-300 disabled:bg-gray-300 disabled:cursor-auto"
-        disabled={content.length === 0 || isPending}
+        disabled={
+          content.length === 0 ||
+          isPatchPostArticlePending ||
+          isGetPostArticlePending
+        }
         type="submit"
       >
         등록
