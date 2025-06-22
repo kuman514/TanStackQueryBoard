@@ -13,13 +13,7 @@ export default function PostTablePage() {
     queryFn: async ({ pageParam }) =>
       (
         await apiClient.get<GetPagenatedApiResponse<Post>>(
-          `/posts?_page=${pageParam}&_per_page=${POSTS_PER_PAGE}`,
-          {
-            headers: {
-              accept: 'application/json',
-              Authorization: `Bearer ${import.meta.env.VITE_API_TOKEN}`,
-            },
-          }
+          `/posts?_page=${pageParam}&_per_page=${POSTS_PER_PAGE}`
         )
       ).data,
     initialPageParam: 1,
