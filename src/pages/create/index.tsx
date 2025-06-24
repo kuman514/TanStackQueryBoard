@@ -41,6 +41,7 @@ export default function CreatePage() {
         return false;
       }}
     >
+      <h1 className="font-bold text-4xl">게시물 작성하기</h1>
       <TextInput
         id="postContent"
         isMultiLine

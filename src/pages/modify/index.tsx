@@ -65,6 +65,7 @@ export default function ModifyPage() {
         return false;
       }}
     >
+      <h1 className="font-bold text-4xl">{postId} 게시물 수정하기</h1>
       <TextInput
         id="postContent"
         isMultiLine
