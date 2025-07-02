@@ -15,7 +15,7 @@ export default function PostArticlePage() {
     throw new Error('Post ID is required to show post article page.');
   }
 
-  const { data: postData, isPending } = useQuery({
+  const { data: postData, isPending: isPostDataPending } = useQuery({
     queryKey: ['posts', postId],
     queryFn: async () => {
       const response = await apiClient.get<Post>(`/posts/${postId}`);
@@ -25,8 +25,8 @@ export default function PostArticlePage() {
 
   const {
     data: commentData,
-    isFetching,
-    hasNextPage,
+    isFetching: isCommentFetching,
+    hasNextPage: isCommentHaveNextPage,
     fetchNextPage,
   } = useInfiniteQuery({
     queryKey: ['comments', postData?.id],
@@ -65,7 +65,7 @@ export default function PostArticlePage() {
     setComment('');
   }, [isPostCommentSuccess]);
 
-  const renderPost = isPending ? (
+  const renderPost = isPostDataPending ? (
     <span className="w-full font-bold text-4xl border-b px-4 pb-4 text-left">
       로딩중
     </span>
@@ -86,11 +86,11 @@ export default function PostArticlePage() {
     .map((comment) => <li key={comment.id}>{comment.content}</li>);
 
   const renderSeeMoreCommentsButtonLabel = (() => {
-    if (isFetching) {
+    if (isCommentFetching) {
       return '댓글 불러오는 중...';
     }
 
-    if (!hasNextPage) {
+    if (!isCommentHaveNextPage) {
       return '댓글 모두 불러옴';
     }
 
@@ -105,7 +105,7 @@ export default function PostArticlePage() {
       </ul>
       <button
         className="px-4 py-3 bg-green-500 text-white rounded-lg cursor-pointer hover:bg-green-300 disabled:bg-gray-300 disabled:cursor-auto"
-        disabled={isFetching || !hasNextPage}
+        disabled={isCommentFetching || !isCommentHaveNextPage}
         onClick={() => {
           fetchNextPage();
         }}
