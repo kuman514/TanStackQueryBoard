@@ -56,6 +56,12 @@ export default function PostArticlePage() {
     },
   });
 
+  const { mutate: deleteComment } = useMutation({
+    mutationFn: async (commentId: string) => {
+      await apiClient.delete<Comment>(`/comments/${commentId}`);
+    },
+  });
+
   const [comment, setComment] = useState<string>('');
 
   useEffect(() => {
@@ -83,7 +89,18 @@ export default function PostArticlePage() {
 
   const renderComments = commentData?.pages
     .reduce((prev, current) => prev.concat(current.data), Array<Comment>(0))
-    .map((comment) => <li key={comment.id}>{comment.content}</li>);
+    .map((comment) => (
+      <li className="w-full flex flex-row" key={comment.id}>
+        <span>{comment.content}</span>
+        <button
+          id={`delete-comment-${comment.id}`}
+          type="button"
+          className="cursor-pointer"
+        >
+          ❌
+        </button>
+      </li>
+    ));
 
   const renderSeeMoreCommentsButtonLabel = (() => {
     if (isCommentFetching) {
@@ -100,7 +117,15 @@ export default function PostArticlePage() {
   return (
     <section className="w-full max-w-4xl flex flex-col items-start text-center gap-8 p-24">
       <div className="w-full flex flex-col items-start gap-4">{renderPost}</div>
-      <ul className="w-full flex flex-col items-start [&_li]:flex [&_li]:flex-col [&_li]:items-start [&_li]:w-full [&_li]:even:bg-gray-200 [&_li]:dark:even:bg-gray-700 [&_li]:p-2">
+      <ul
+        className="w-full flex flex-col items-start [&_li]:flex [&_li]:flex-col [&_li]:items-start [&_li]:w-full [&_li]:even:bg-gray-200 [&_li]:dark:even:bg-gray-700 [&_li]:p-2"
+        onClick={(event) => {
+          if (!(event.target instanceof HTMLButtonElement)) {
+            return;
+          }
+          deleteComment(event.target.id.split('delete-comment-')[1]);
+        }}
+      >
         {renderComments}
       </ul>
       <button
